@@ -1,0 +1,41 @@
+--------------- In this private network we are using the  IBFT 2.0 (proof of authority) consensus protocol.--------------------
+mkdir -p node1/data
+mkdir -p node2/data
+mkdir -p node3/data
+mkdir -p node4/data
+
+tree
+
+create a ibftConfigFile.json
+
+Run Command: that create a genesis block
+    besu operator generate-blockchain-config --config-file=ibftConfigFile.json --to=networkFiles --private-key-file-name=key
+
+ls networkFiles/
+
+tree
+
+mv networkFiles/genesis.json genesis.json
+
+----- Move key and key.pub files on different node data
+ mv networkFiles/keys/0x460dc859d409c0fa913fb8cf591c0b14c6051052/key.pub node1/data/
+ mv networkFiles/keys/0x15770e0a4b29a8543783ad3d49bb723a72e98ed9/key.pub node2/data/
+ mv networkFiles/keys/0xdc1655957ad3ada6ea6d3991ac76e1857d5c1aae/key.pub node3/data/
+ mv networkFiles/keys/0xf1276faf7505568295a6cb3b5a95516ed3c52dae/key.pub node4/data/
+
+---- create a bootnode, Node1 is bootnode 
+
+cd node1 
+besu --data-path=data --genesis-file=../genesis.json --rpc-http-enabled --rpc-http-api=ETH,NET,IBFT --host-allowlist=* --rpc-http-cors-origins=all
+
+------Create a peers
+---encode url you are getting from the running node of Node1
+cd node2
+besu --data-path=data --genesis-file=../genesis.json --bootnodes=enode://d1349dfdb4aef51a1f88d30f860f28740dfd5540d392a1b7393373ef705ab9f138ab4e9542bde261541244bd39fabc6d16afdd545dcbdb0d6c85c1c3ddf765f1@127.0.0.1:30303 --p2p-port=30304 --rpc-http-enabled --rpc-http-api=ETH,NET,IBFT --host-allowlist=* --rpc-http-cors-origins=all --rpc-http-port=8546
+
+
+cd node3 
+besu --data-path=data --genesis-file=../genesis.json --bootnodes=enode://d1349dfdb4aef51a1f88d30f860f28740dfd5540d392a1b7393373ef705ab9f138ab4e9542bde261541244bd39fabc6d16afdd545dcbdb0d6c85c1c3ddf765f1@127.0.0.1:30303 --p2p-port=30305 --rpc-http-enabled --rpc-http-api=ETH,NET,IBFT --host-allowlist=* --rpc-http-cors-origins=all --rpc-http-port=8547
+
+cd node4
+besu --data-path=data --genesis-file=../genesis.json --bootnodes=enode://d1349dfdb4aef51a1f88d30f860f28740dfd5540d392a1b7393373ef705ab9f138ab4e9542bde261541244bd39fabc6d16afdd545dcbdb0d6c85c1c3ddf765f1@127.0.0.1:30303 --p2p-port=30306 --rpc-http-enabled --rpc-http-api=ETH,NET,IBFT --host-allowlist=* --rpc-http-cors-origins=all --rpc-http-port=8548
