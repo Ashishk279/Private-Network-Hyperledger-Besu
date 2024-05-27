@@ -39,3 +39,7 @@ besu --data-path=data --genesis-file=../genesis.json --bootnodes=enode://d1349df
 
 cd node4
 besu --data-path=data --genesis-file=../genesis.json --bootnodes=enode://d1349dfdb4aef51a1f88d30f860f28740dfd5540d392a1b7393373ef705ab9f138ab4e9542bde261541244bd39fabc6d16afdd545dcbdb0d6c85c1c3ddf765f1@127.0.0.1:30303 --p2p-port=30306 --rpc-http-enabled --rpc-http-api=ETH,NET,IBFT --host-allowlist=* --rpc-http-cors-origins=all --rpc-http-port=8548
+
+
+-------conform the network is working
+curl -X POST --data "{\"jsonrpc\":\"2.0\",\"method\":\"ibft_getValidatorsByBlockNumber\",\"params\":[\"latest\"], \"id\":1}" localhost:8545
